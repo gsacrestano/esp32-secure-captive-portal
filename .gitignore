@@ -1,0 +1,55 @@
+# --- Build & Output (ESP-IDF / PlatformIO / CMake) ---
+build/
+Build/
+build-*/
+.pio/
+.pioenvs/
+.piolibdeps/
+.clangd/
+
+# CMake artifacts
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+# Compilati & Binari
+*.o
+*.obj
+*.bin
+*.elf
+*.map
+*.hex
+*.a
+*.d
+
+# --- ESP-IDF configurazioni generate ---
+sdkconfig.old
+sdkconfig.ci
+# Decommenta la riga sotto se generi sdkconfig al volo e non vuoi tracciarlo:
+# sdkconfig
+
+# --- Sicurezza & Credenziali (Cruciale per Captive Portal Protetto) ---
+# Chiavi private, certificati SSL/TLS e file di ambiente
+*.pem
+*.key
+*.crt
+*.cer
+*.der
+*.env
+secrets.h
+credentials.h
+
+# --- Editor & OS ---
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/c_cpp_properties.json
+.idea/
+*.swp
+*.bak
+*.log
+.DS_Store
+Thumbs.db
