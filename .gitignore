@@ -1,20 +1,19 @@
-# --- Build & Output (ESP-IDF / PlatformIO / CMake) ---
-build/
-Build/
-build-*/
+# PlatformIO & ESP-IDF Build Artifacts
 .pio/
 .pioenvs/
 .piolibdeps/
-.clangd/
+build/
+Build/
+build-*/
 
-# CMake artifacts
+# CMake & Toolchain Generated Files
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
-Makefile
 compile_commands.json
+Makefile
 
-# Compilati & Binari
+# Compiled Objects, Binaries & Debug Files
 *.o
 *.obj
 *.bin
@@ -24,32 +23,56 @@ compile_commands.json
 *.a
 *.d
 
-# --- ESP-IDF configurazioni generate ---
+# ESP-IDF Configurations
 sdkconfig.old
 sdkconfig.ci
-# Decommenta la riga sotto se generi sdkconfig al volo e non vuoi tracciarlo:
+# Uncomment below if sdkconfig is generated dynamically or machine-specific:
 # sdkconfig
 
-# --- Sicurezza & Credenziali (Cruciale per Captive Portal Protetto) ---
-# Chiavi private, certificati SSL/TLS e file di ambiente
+# Security & Credentials
 *.pem
 *.key
 *.crt
 *.cer
 *.der
 *.env
+*.env.*
 secrets.h
 credentials.h
 
-# --- Editor & OS ---
+# Language Server, Tools & Python Caches (PlatformIO/IDF tools)
+.clangd/
+.cache/
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+
+# IDEs & Text Editors
+
+# Ignore entire .vscode directory by default
 .vscode/*
+
+# Whitelist safe, team-shared configurations
 !.vscode/settings.json
 !.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/c_cpp_properties.json
-.idea/
+!.vscode/extensions.json
+
+
+# Editor swap, backup, and log files
 *.swp
+*.swo
+*~
 *.bak
 *.log
+
+# Operating System Metadata
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
 Thumbs.db
+ehthumbs.db
+Desktop.ini
