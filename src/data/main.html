@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login Page1</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --bg-color: #f4f7f6;
+            --text-dark: #333;
+            --card-bg: #ffffff;
+            --error-color: #dc3545;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 350px;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box; 
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            transition: background 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: none; /* Nascosto di default */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-card">
+        <h2>Enter your username and password</h2>
+        <form action="/login" method="POST" id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Inserisci username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="••••••••">
+            </div>
+
+            <p id="validationError" class="error-message">Please, fill all the field.</p>
+
+            <input type="submit" value="Login">
+        </form>
+    </div>
+
+    <script>
+        // Client-side validation script
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const errorMsg = document.getElementById('validationError');
+
+            if (user === "" || pass === "") {
+                event.preventDefault();
+                
+                errorMsg.style.display = 'block';
+                
+                if(user === "") document.getElementById('username').style.borderColor = '#dc3545';
+                if(pass === "") document.getElementById('password').style.borderColor = '#dc3545';
+            }
+        });
+
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', () => {
+                input.style.borderColor = '#ddd';
+                document.getElementById('validationError').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,12 +1,15 @@
 #include <Arduino.h>
 #include "network/ap_configurator.h"
 #include "network/dns_configurator.h"
+#include "controller/controller.h"
 
 void setup()
 {
   Serial.begin(115200);
   ap_configurator::begin();
   dns_configurator::begin(ap_configurator::getIP());
+  controller::begin();
+
 }
 
 void loop()
