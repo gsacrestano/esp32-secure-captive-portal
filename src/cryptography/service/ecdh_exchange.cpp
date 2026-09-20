@@ -1,5 +1,7 @@
 #include "ecdh_exchange.h"
 
+#include <HardwareSerial.h>
+
 #include "cstring"
 #include "mbedtls/base64.h"
 #include "mbedtls/ctr_drbg.h"
@@ -58,5 +60,22 @@ int key_to_base64(char* buf, size_t len, char* dest, size_t dest_len)
         dest[b64_len] = '\0';
         return 0;
     }
+}
+
+int base64_to_key(char* buf, size_t len, size_t* out_len, char* dest, size_t dest_len)
+{
+    int outcome =
+        mbedtls_base64_decode((unsigned char*)dest, dest_len, out_len, (unsigned char*)buf, len);
+    return outcome;
+}
+
+int compute_secret(unsigned char* buf, size_t buf_len)
+{
+    int outcome = mbedtls_ecp_point_read_binary(&ctx.grp, &ctx.Qp, buf, buf_len);
+    if (outcome != 0) return outcome;
+
+    outcome = mbedtls_ecdh_compute_shared(&ctx.grp, &ctx.z, &ctx.Qp, &ctx.d, NULL, NULL);
+    if (outcome != 0) return outcome;
+    return outcome;
 }
 }  // namespace ecdh_exchange

@@ -29,4 +29,23 @@ int generate_local_key(char* buf, size_t buf_len, size_t* olen);
  * on encoding failure.
  */
 int key_to_base64(char* buf, size_t len, char* dest, size_t dest_len);
+
+/**
+ * @brief Decodes a Base64-encoded key string into raw binary format.
+ * @param[in]  buf      Pointer to the Base64 input string.
+ * @param[in]  len      Length of the input string in bytes.
+ * @param[out] out_len  Pointer receiving the number of decoded bytes written.
+ * @param[out] dest     Output buffer for the decoded binary data.
+ * @param[in]  dest_len Maximum capacity of the destination buffer in bytes.
+ * @return 0 on success, or an mbedTLS error code on failure.
+ */
+int base64_to_key(char* buf, size_t len, size_t* out_len, char* dest, size_t dest_len);
+
+/**
+ * @brief Computes the shared secret using the peer's raw public key point.
+ * @param[in] buf     Pointer to the peer's uncompressed public key point (0x04 || X || Y).
+ * @param[in] buf_len Size of the peer key buffer in bytes.
+ * @return 0 on success, or an mbedTLS error code on failure.
+ */
+int compute_secret(unsigned char* buf, size_t buf_len);
 }  // namespace ecdh_exchange
