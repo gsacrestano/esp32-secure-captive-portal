@@ -2,6 +2,7 @@
 
 #include "ESPAsyncWebServer.h"
 #include "captive_portal/controller/captive_portal_controller.h"
+#include "cryptography/controller/cryptography_controller.h"
 
 namespace
 {
@@ -14,6 +15,7 @@ namespace web_server
 
 bool begin()
 {
+    cryptography_controller::register_routes(server);
     captive_portal_controller::register_routes(server);
     server.begin();
     isRunning = true;

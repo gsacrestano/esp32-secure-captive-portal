@@ -1,6 +1,7 @@
 #include "ecdh_exchange.h"
 
 #include "cstring"
+#include "mbedtls/base64.h"
 #include "mbedtls/ctr_drbg.h"
 #include "mbedtls/ecdh.h"
 #include "mbedtls/ecp.h"
@@ -43,4 +44,19 @@ int generate_local_key(char* buf, size_t buf_len, size_t* olen)
     return 0;
 }
 
+int key_to_base64(char* buf, size_t len, char* dest, size_t dest_len)
+{
+    size_t b64_len = 0;
+
+    int outcome = mbedtls_base64_encode((unsigned char*)dest, dest_len, &b64_len,
+                                        (const unsigned char*)buf, len);
+    if (outcome != 0) return outcome;
+    if (dest_len <= b64_len)
+        return -1;
+    else
+    {
+        dest[b64_len] = '\0';
+        return 0;
+    }
+}
 }  // namespace ecdh_exchange
