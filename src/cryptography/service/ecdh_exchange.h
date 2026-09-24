@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <stdint.h>
+
 #include <cstddef>
 
 namespace ecdh_exchange
@@ -42,10 +44,12 @@ int key_to_base64(char* buf, size_t len, char* dest, size_t dest_len);
 int base64_to_key(char* buf, size_t len, size_t* out_len, char* dest, size_t dest_len);
 
 /**
- * @brief Computes the shared secret using the peer's raw public key point.
- * @param[in] buf     Pointer to the peer's uncompressed public key point (0x04 || X || Y).
- * @param[in] buf_len Size of the peer key buffer in bytes.
+ * @brief Computes the ECDH shared secret using the peer's public key point.
+ * @param[in]  buf           Pointer to the peer's uncompressed public key point (0x04 || X || Y).
+ * @param[in]  buf_len       Size of the peer key buffer in bytes.
+ * @param[out] shared_secret Output buffer receiving the 32-byte computed shared secret.
  * @return 0 on success, or an mbedTLS error code on failure.
  */
-int compute_secret(unsigned char* buf, size_t buf_len);
+int compute_secret(unsigned char* buf, size_t buf_len, uint8_t shared_secret[32]);
+
 }  // namespace ecdh_exchange

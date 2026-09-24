@@ -69,13 +69,17 @@ int base64_to_key(char* buf, size_t len, size_t* out_len, char* dest, size_t des
     return outcome;
 }
 
-int compute_secret(unsigned char* buf, size_t buf_len)
+int compute_secret(unsigned char* buf, size_t buf_len, uint8_t shared_secret[32])
 {
     int outcome = mbedtls_ecp_point_read_binary(&ctx.grp, &ctx.Qp, buf, buf_len);
     if (outcome != 0) return outcome;
 
     outcome = mbedtls_ecdh_compute_shared(&ctx.grp, &ctx.z, &ctx.Qp, &ctx.d, NULL, NULL);
     if (outcome != 0) return outcome;
+
+    outcome = mbedtls_mpi_write_binary(&ctx.z, shared_secret, 32);
+    if (outcome != 0) return outcome;
+
     return outcome;
 }
 }  // namespace ecdh_exchange
