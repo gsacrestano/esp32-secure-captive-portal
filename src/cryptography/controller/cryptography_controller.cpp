@@ -40,19 +40,5 @@ void register_routes(AsyncWebServer& server)
 
                   request->send(200, "text/plain", "Key generated");
               });
-
-    server.on("/api/data", HTTP_GET,
-              [](AsyncWebServerRequest* request)
-              {
-                  uint8_t output[128];
-                  size_t o_len;
-                  int outcome = session_orchestrator::encrypt_payload(output, 128, &o_len);
-                  if (outcome != 0) return server_error(request, outcome);
-                  AsyncResponseStream* res =
-                      request->beginResponseStream("application/octet-stream");
-                  res->write(output, o_len);
-                  res->setCode(200);
-                  request->send(res);
-              });
 }
 }  // namespace cryptography_controller

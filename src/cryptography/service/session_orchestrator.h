@@ -27,12 +27,4 @@ int generate_public_key(char* response_string, size_t response_string_size);
  */
 int generate_aes_key(char* b64, size_t b64_size);
 
-/**
- * @brief Encrypts the default payload using the active AES session key.
- * @param[out] output      Destination buffer for the resulting ciphertext.
- * @param[in]  output_size Capacity of the output buffer in bytes.
- * @param[out] o_len       Pointer receiving the actual number of ciphertext bytes written.
- * @return 0 on success, -1 on encryption failure.
- */
-int encrypt_payload(uint8_t* output, size_t output_size, size_t* o_len);
 }  // namespace session_orchestrator

@@ -46,13 +46,4 @@ int generate_aes_key(char* b64, size_t b64_size)
     crypto_cipher::set_session_key(derived_key);
     return 0;
 }
-int encrypt_payload(uint8_t* output, size_t output_size, size_t* o_len)
-{
-    const char* input = "Hello World";
-    if (!crypto_cipher::encrypt_data((const uint8_t*)input, strlen(input), output, output_size,
-                                     o_len))
-        return -1;
-
-    return 0;
-}
 }  // namespace session_orchestrator
