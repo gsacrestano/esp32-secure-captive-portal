@@ -1,0 +1,7 @@
+services:
+  collector:
+    build: .
+    container_name: esp32-log-collector
+    network_mode: "host"
+    environment:
+      - ESP_IP=192.168.4.1
