@@ -25,6 +25,9 @@ namespace crypto_cipher
 bool encrypt_data(const uint8_t* input, size_t input_len, uint8_t* output, size_t max_output_len,
                   size_t* out_len);
 
+bool decrypt_data(const uint8_t* input, size_t input_len, uint8_t* output, size_t max_output_len,
+                  size_t* out_len);
+
 /**
  * @brief Stores the 32-byte AES-256 session key internally.
  * @param[in] key Pointer to the 32-byte symmetric key array.
