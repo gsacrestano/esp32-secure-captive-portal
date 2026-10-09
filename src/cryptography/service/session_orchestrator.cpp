@@ -7,20 +7,30 @@
 #include "../utils/derive_key.h"
 #include "crypto_cipher.h"
 #include "ecdh_exchange.h"
+#include "mbedtls/base64.h"
 
 namespace session_orchestrator
 {
 int generate_public_key(char* response_string, size_t response_string_size)
 {
-    char pub_key_buf[65];
+    uint8_t pub_key_buf[65];
     size_t len = 0;
+    size_t b64_len = 0;
 
-    int outcome = ecdh_exchange::generate_local_key(pub_key_buf, sizeof(pub_key_buf), &len);
+    int outcome = ecdh_exchange::generate_local_key((char*)pub_key_buf, sizeof(pub_key_buf), &len);
     if (outcome != 0) return outcome;
 
-    outcome = ecdh_exchange::key_to_base64(pub_key_buf, len, response_string, response_string_size);
+    outcome = mbedtls_base64_encode((unsigned char*)response_string, response_string_size, &b64_len,
+                                    pub_key_buf, len);
     if (outcome != 0) return outcome;
 
+    // Correct buffer overflow check (checking response_string_size directly, not sizeof)
+    if (b64_len >= response_string_size)
+    {
+        return -1;
+    }
+
+    response_string[b64_len] = '\0';
     return 0;
 }
 
@@ -29,8 +39,9 @@ int generate_aes_key(char* b64, size_t b64_size)
     unsigned char client_key_buf[65];
     size_t out_len = 0;
 
-    int outcome = ecdh_exchange::base64_to_key(b64, b64_size, &out_len, (char*)client_key_buf,
-                                               sizeof(client_key_buf));
+    // Use strlen(b64) safely to decode the input string
+    int outcome = mbedtls_base64_decode(client_key_buf, sizeof(client_key_buf), &out_len,
+                                        (unsigned char*)b64, strlen(b64));
     if (outcome != 0) return outcome;
 
     uint8_t shared_secret[32];
@@ -41,7 +52,9 @@ int generate_aes_key(char* b64, size_t b64_size)
     uint8_t derived_key[32];
     if (!derive_key::derive_aes_key(shared_secret, 32, (const uint8_t*)salt, 4, "Info",
                                     derived_key))
+    {
         return -1;
+    }
 
     crypto_cipher::set_session_key(derived_key);
     return 0;
