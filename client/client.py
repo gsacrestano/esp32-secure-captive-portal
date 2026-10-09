@@ -53,9 +53,36 @@ if res_handshake.status_code != 200:
 
 print(f"[*] Handshake response: {res_handshake.text.strip()}")
 
-# 6. Fetch encrypted data from /api/access
-data_url = f"{BASE_URL}/api/access"
-res_data = requests.get(data_url, timeout=5)
+# Funzione per cifrare la password simulando encrypt_data dell'ESP32
+def encrypt_password(password_str: str, aes_key: bytes) -> str:
+    # Genera IV casuale di 16 byte
+    iv = os.urandom(16)
+    
+    # Applica il padding PKCS#7 (blocco da 128 bit / 16 byte)
+    padder = padding.PKCS7(128).padder()
+    padded_data = padder.update(password_str.encode('utf-8')) + padder.finalize()
+    
+    # Cifratura AES-256-CBC
+    cipher = Cipher(algorithms.AES(aes_key), modes.CBC(iv))
+    encryptor = cipher.encryptor()
+    ciphertext = encryptor.update(padded_data) + encryptor.finalize()
+    
+    # Struttura binaria identica all'ESP32: [ 16-byte IV ] || [ Ciphertext ]
+    encrypted_payload = iv + ciphertext
+    
+    # Restituisce il payload in Base64 per poterlo passare come parametro HTTP
+    return base64.b64encode(encrypted_payload).decode('utf-8')
+
+# Richiedi la password all'utente da cifrare
+raw_password = "1234"
+encrypted_auth = encrypt_password(raw_password, derived_aes_key)
+
+# 6. Fetch encrypted data from /api/access passando la password cifrata come parametro 'auth'
+res_data = requests.post(
+    f"{BASE_URL}/api/access",
+    data={"auth": encrypted_auth},
+    timeout=5
+)
 
 if res_data.status_code != 200:
     print(f"[!] Failed to fetch data: {res_data.status_code} - {res_data.text}")
